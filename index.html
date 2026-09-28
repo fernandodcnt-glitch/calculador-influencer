@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Calculadora de tarifas para creadoras de contenido: historias, reels, TikTok, pauta y paquetes según métricas propias.">
+<title>Tarifario Creadora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: two-column workbench — métricas a la izquierda, tarifario vivo a la derecha; una columna en el teléfono */
+:root{
+  --bg:#f5f6fa; --surface:#ffffff; --line:#d9dcea; --fg:#171a2b; --muted:#565c78;
+  --accent:#3346c4; --accent-soft:#e6e9fb; --good:#1f7a4d; --bad:#b3372c;
+  --display:'Bricolage Grotesque', 'Figtree', system-ui, sans-serif;
+  --body:'Figtree', system-ui, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10121c; --surface:#181b29; --line:#2c3148; --fg:#eceefa; --muted:#a2a8c6;
+  --accent:#8f9dff; --accent-soft:#232a4d; --good:#5fd39a; --bad:#ff8a7e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10121c; --surface:#181b29; --line:#2c3148; --fg:#eceefa; --muted:#a2a8c6;
+  --accent:#8f9dff; --accent-soft:#232a4d; --good:#5fd39a; --bad:#ff8a7e; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-direction:column;gap:8px;max-width:70ch}
+h1{font-family:var(--display);font-size:clamp(28px,4.5vw,42px);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-family:var(--display);font-size:20px;margin:0}
+h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
+p{margin:0}
+.lead{color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:24px;align-items:start}
+@media (max-width:880px){.grid{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+@media (max-width:460px){.fields{grid-template-columns:minmax(0,1fr)}}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:500}
+label small{color:var(--muted);font-weight:400;font-size:12px}
+input,select{font:500 15px var(--mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check{flex-direction:row;align-items:center;gap:8px}
+.check input{width:18px;height:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:600 12px var(--mono);padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.chip.up{color:var(--good)} .chip.down{color:var(--bad)}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+td.n,th.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+td .how{display:block;color:var(--muted);font-size:12px;font-family:var(--mono)}
+.big{font:700 34px var(--display);letter-spacing:-.01em}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding-top:6px}
+.total .ars{font:500 13px var(--mono);color:var(--muted)}
+.qty{width:70px;padding:6px 8px}
+button{font:600 14px var(--body);background:var(--accent);color:var(--surface);border:0;border-radius:10px;padding:11px 16px;cursor:pointer;min-height:44px}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+details{border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:600}
+.explain{display:flex;flex-direction:column;gap:10px;margin-top:10px;color:var(--muted);font-size:14px;max-width:70ch}
+.explain b{color:var(--fg)}
+textarea{width:100%;min-height:180px;font:13px/1.5 var(--mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+.status{font-size:13px;color:var(--good)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h3>Tarifario para campañas con marcas</h3>
+  <h1>Calculá tus tarifas con tus propias métricas</h1>
+  <p class="lead">Cargá los números de tus estadísticas de Instagram y TikTok. El precio de cada pieza sale de tus vistas reales, con ajustes por engagement, audiencia y producción. Los valores de ejemplo son de muestra: reemplazalos por los tuyos. Todo se guarda solo en este navegador.</p>
+</header>
+
+<div class="grid">
+<div class="col">
+
+  <section class="panel" aria-labelledby="m1">
+    <h2 id="m1">1. Tus métricas</h2>
+    <p class="lead" style="font-size:13px">Promedio de los últimos 10–15 posteos de cada formato, sin contar los que se hicieron virales.</p>
+    <div class="fields">
+      <label for="vReel">Vistas promedio por reel<input id="vReel" type="number" min="0" step="100" value="15000"></label>
+      <label for="vTik">Vistas promedio por TikTok<input id="vTik" type="number" min="0" step="100" value="20000"></label>
+      <label for="vStory">Vistas promedio por historia<input id="vStory" type="number" min="0" step="100" value="6000"></label>
+      <label for="eng">Engagement (%)<small>(likes+comentarios+guardados+compartidos) ÷ alcance</small><input id="eng" type="number" min="0" step="0.1" value="4"></label>
+      <label for="arg">Audiencia en Argentina (%)<input id="arg" type="number" min="0" max="100" step="1" value="75"></label>
+      <label for="prod">Nivel de producción
+        <select id="prod"><option value="0">Básica (celular, casa)</option><option value="15" selected>Media (guion, edición)</option><option value="30">Alta (locación, extras)</option></select></label>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="m2">
+    <h2 id="m2">2. Parámetros de mercado</h2>
+    <p class="lead" style="font-size:13px">CPM = cuánto cobrás cada 1.000 vistas. Rangos orientativos Latam: historia 5–12, reel 12–25, TikTok 10–20 USD.</p>
+    <div class="fields">
+      <label for="cpmStory">CPM historia (USD)<input id="cpmStory" type="number" min="0" step="0.5" value="9"></label>
+      <label for="cpmReel">CPM reel (USD)<input id="cpmReel" type="number" min="0" step="0.5" value="18"></label>
+      <label for="cpmTik">CPM TikTok (USD)<input id="cpmTik" type="number" min="0" step="0.5" value="15"></label>
+      <label for="hora">Valor de tu hora (USD)<small>Define el precio mínimo</small><input id="hora" type="number" min="0" step="1" value="15"></label>
+      <label for="hReel">Horas por reel / TikTok<input id="hReel" type="number" min="0" step="0.5" value="4"></label>
+      <label for="hStory">Horas por historia<input id="hStory" type="number" min="0" step="0.5" value="1"></label>
+      <label for="collab">Recargo reel con colaboración (%)<input id="collab" type="number" min="0" step="1" value="25"></label>
+      <label for="pauta">Derecho a pauta 30 días (% de la pieza)<input id="pauta" type="number" min="0" step="1" value="40"></label>
+      <label for="excl">Exclusividad de rubro (meses)<small>+25% del total por mes</small><input id="excl" type="number" min="0" step="1" value="0"></label>
+      <label for="tc">Tipo de cambio (ARS por USD)<small>Dejá 0 para no mostrar pesos</small><input id="tc" type="number" min="0" step="1" value="0"></label>
+      <label class="check" for="iva"><input id="iva" type="checkbox">Sumar IVA 21% (responsable inscripta)</label>
+    </div>
+  </section>
+
+</div>
+<div class="col">
+
+  <section class="panel" aria-labelledby="t1">
+    <div class="row" style="justify-content:space-between"><h2 id="t1">Tarifario por pieza</h2><span class="lead" style="font-size:13px">USD, redondeado a 5</span></div>
+    <div class="chips" id="chips"></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Pieza</th><th class="n">Precio</th></tr></thead>
+      <tbody id="rates"></tbody>
+    </table></div>
+  </section>
+
+  <section class="panel" aria-labelledby="t2">
+    <h2 id="t2">Armá un paquete</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Pieza</th><th class="n">Cant.</th><th class="n">Subtotal</th></tr></thead>
+      <tbody id="pack"></tbody>
+    </table></div>
+    <div class="fields">
+      <label for="dPack">Descuento por paquete (%)<small>Referencia: 10–15%</small><input id="dPack" type="number" min="0" max="50" step="1" value="15"></label>
+      <label for="meses">Meses de contrato<small>1 = campaña única</small><input id="meses" type="number" min="1" step="1" value="1"></label>
+      <label for="dLargo">Descuento largo plazo (%)<small>Solo desde 3 meses. Ref.: 20–25%</small><input id="dLargo" type="number" min="0" max="50" step="1" value="20"></label>
+    </div>
+    <div id="packTotals" style="display:flex;flex-direction:column;gap:6px"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="t3">
+    <h2 id="t3">Texto para responder a la agencia</h2>
+    <textarea id="quote" aria-label="Texto de la cotización" readonly></textarea>
+    <div class="row"><button id="copy" type="button">Copiar cotización</button><button id="reset" type="button" class="ghost">Volver a los valores de ejemplo</button><span class="status" id="status" role="status"></span></div>
+  </section>
+
+</div>
+</div>
+
+<section class="panel" aria-labelledby="e1">
+  <h2 id="e1">Cómo se calcula (para defender cada número)</h2>
+  <div class="explain">
+    <p><b>Precio base = (vistas promedio ÷ 1.000) × CPM.</b> La marca paga por las personas que realmente ven el contenido, no por la cantidad de seguidores. Tené a mano capturas de tus estadísticas para mostrarlo.</p>
+    <p><b>Precio mínimo = horas de trabajo × valor de tu hora.</b> Si tus vistas son bajas, nunca cobrás menos que el tiempo que te lleva hacer la pieza. Se usa el mayor de los dos.</p>
+    <p><b>Engagement:</b> menos de 1,5% resta 15%; entre 1,5 y 3% no cambia; entre 3 y 5% suma 10%; más de 5% suma 20%. Una comunidad que interactúa vende más.</p>
+    <p><b>Audiencia en Argentina:</b> 70% o más suma 10%; menos de 50% resta 10%. A una marca que vende acá le sirve la audiencia de acá.</p>
+    <p><b>Producción:</b> media suma 15% y alta suma 30%, por guion, edición, locación o extras.</p>
+    <p><b>Reel con colaboración:</b> el reel aparece también en el perfil de la marca y queda en su feed, por eso lleva un recargo sobre el reel sin colaboración.</p>
+    <p><b>Derecho a pauta 30 días:</b> la marca invierte para mostrar tu pieza como anuncio. Se cobra un porcentaje del valor de la pieza por cada 30 días. Aclarar plataformas, plazo y que no incluye otros usos.</p>
+    <p><b>Exclusividad:</b> si la marca te pide no trabajar con otras marcas de snacks, eso tiene un costo: 25% del total por cada mes.</p>
+    <p><b>Paquetes y largo plazo:</b> varias piezas juntas llevan descuento, y un contrato de 3 meses o más, otro descuento adicional. A cambio conviene pedir 50% por adelantado y pagos mensuales.</p>
+    <p><b>Facturación:</b> indicá si el precio es en USD o en pesos (y a qué tipo de cambio), si es más IVA o con factura C (monotributo), y si el pago viene del exterior (puede corresponder factura E). Consultalo con tu contador.</p>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+  const ids=['vReel','vTik','vStory','eng','arg','prod','cpmStory','cpmReel','cpmTik','hora','hReel','hStory','collab','pauta','excl','tc','iva','dPack','meses','dLargo'];
+  const defaults={};
+  ids.forEach(id=>{const el=document.getElementById(id);defaults[id]=el.type==='checkbox'?el.checked:el.value;});
+  const KEY='tarifario-creadora-v1';
+  let qty={story:3,reel:0,reelCollab:1,tik:1,pautaReel:1,pautaTik:0};
+  const qtyDefaults={...qty};
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){ids.forEach(id=>{if(s[id]!==undefined){const el=document.getElementById(id);if(el.type==='checkbox')el.checked=s[id];else el.value=s[id];}});if(s.qty)qty={...qty,...s.qty};}}catch(e){}
+
+  const v=id=>{const el=document.getElementById(id);return el.type==='checkbox'?el.checked:(parseFloat(el.value)||0)};
+  const r5=x=>Math.round(x/5)*5;
+  const fmt=x=>'USD '+Math.round(x).toLocaleString('es-AR');
+  const ars=x=>{const tc=v('tc');return tc>0?'$ '+Math.round(x*tc).toLocaleString('es-AR'):''};
+
+  function compute(){
+    const e=v('eng'),a=v('arg'),p=v('prod');
+    const fEng=e<1.5?-15:e<3?0:e<=5?10:20;
+    const fArg=a>=70?10:a<50?-10:0;
+    const mult=1+(fEng+fArg+p)/100;
+    const piece=(views,cpm,hours)=>{const cpmP=views/1000*cpm*mult;const floor=hours*v('hora');return {price:r5(Math.max(cpmP,floor)),cpmP,floor,usedFloor:floor>cpmP};};
+    const story=piece(v('vStory'),v('cpmStory'),v('hStory'));
+    const reel=piece(v('vReel'),v('cpmReel'),v('hReel'));
+    const tik=piece(v('vTik'),v('cpmTik'),v('hReel'));
+    const reelCollab=r5(reel.price*(1+v('collab')/100));
+    const pautaReel=r5(reelCollab*v('pauta')/100);
+    const pautaTik=r5(tik.price*v('pauta')/100);
+    return {fEng,fArg,p,mult,story,reel,tik,reelCollab,pautaReel,pautaTik};
+  }
+
+  function render(){
+    const c=compute();
+    const chip=(t,val)=>`<span class="chip ${val>0?'up':val<0?'down':''}">${t} ${val>0?'+':''}${val}%</span>`;
+    document.getElementById('chips').innerHTML=chip('Engagement',c.fEng)+chip('Audiencia AR',c.fArg)+chip('Producción',c.p)+`<span class="chip">Ajuste total ×${c.mult.toFixed(2)}</span>`;
+    const how=(pc,views,cpm,hk)=>pc.usedFloor?`mínimo: ${v(hk)} h × USD ${v('hora')}`:`${(views/1000).toLocaleString('es-AR')} mil vistas × CPM ${cpm} × ${c.mult.toFixed(2)}`;
+    const items=[
+      ['story','Historia (1 frame)',c.story.price,how(c.story,v('vStory'),v('cpmStory'),'hStory')],
+      ['reel','Reel sin colaboración',c.reel.price,how(c.reel,v('vReel'),v('cpmReel'),'hReel')],
+      ['reelCollab','Reel con colaboración',c.reelCollab,`reel + ${v('collab')}%`],
+      ['tik','TikTok',c.tik.price,how(c.tik,v('vTik'),v('cpmTik'),'hReel')],
+      ['pautaReel','Pauta 30 días – reel',c.pautaReel,`${v('pauta')}% del reel con colaboración`],
+      ['pautaTik','Pauta 30 días – TikTok',c.pautaTik,`${v('pauta')}% del TikTok`]
+    ];
+    document.getElementById('rates').innerHTML=items.map(i=>`<tr><td>${i[1]}<span class="how">${i[3]}</span></td><td class="n">${fmt(i[2])}${ars(i[2])?`<span class="how">${ars(i[2])}</span>`:''}</td></tr>`).join('');
+
+    let sub=0;
+    document.getElementById('pack').innerHTML=items.map(i=>{const q=qty[i[0]]||0;sub+=q*i[2];return `<tr><td>${i[1]}</td><td class="n"><input class="qty" type="number" min="0" step="1" id="q-${i[0]}" data-k="${i[0]}" value="${q}" aria-label="Cantidad de ${i[1]}"></td><td class="n">${fmt(q*i[2])}</td></tr>`}).join('');
+    document.querySelectorAll('.qty').forEach(el=>el.addEventListener('change',()=>{qty[el.dataset.k]=Math.max(0,parseInt(el.value)||0);save();render();document.getElementById('q-'+el.dataset.k)?.focus();}));
+
+    const meses=Math.max(1,Math.round(v('meses')));
+    const dPack=v('dPack')/100, dLargo=meses>=3?v('dLargo')/100:0;
+    const afterPack=sub*(1-dPack);
+    const exclMonths=v('excl');
+    const exclAmt=afterPack*0.25*exclMonths;
+    const monthly=r5((afterPack+exclAmt)*(1-dLargo));
+    const ivaOn=v('iva');
+    const withIva=x=>ivaOn?x*1.21:x;
+    const totalContract=monthly*meses;
+    const lines=[
+      ['Suma de piezas',fmt(sub)],
+      [`Descuento paquete (${v('dPack')}%)`,'− '+fmt(sub*dPack)],
+      exclMonths>0?[`Exclusividad (${exclMonths} ${exclMonths==1?'mes':'meses'})`,'+ '+fmt(exclAmt)]:null,
+      dLargo>0?[`Descuento largo plazo (${v('dLargo')}%)`,'− '+fmt((afterPack+exclAmt)*dLargo)]:null
+    ].filter(Boolean);
+    document.getElementById('packTotals').innerHTML=lines.map(l=>`<div class="row" style="justify-content:space-between;font-size:14px"><span class="lead">${l[0]}</span><span style="font-family:var(--mono)">${l[1]}</span></div>`).join('')+
+      `<div class="total"><span>${meses>1?'Por mes':'Total paquete'}${ivaOn?' + IVA':''}</span><span class="big">${fmt(withIva(monthly))}</span></div>`+
+      (ars(withIva(monthly))?`<div class="total"><span class="ars">En pesos</span><span class="ars">${ars(withIva(monthly))}</span></div>`:'')+
+      (meses>1?`<div class="total"><span class="lead">Total contrato ${meses} meses</span><span style="font:600 16px var(--mono)">${fmt(withIva(totalContract))}</span></div>`:'');
+
+    const iv=ivaOn?' + IVA':'';
+    const packList=items.filter(i=>(qty[i[0]]||0)>0).map(i=>`  - ${qty[i[0]]} × ${i[1]}`).join('\n');
+    document.getElementById('quote').value=
+`Hola! Gracias por pensar en mí para la campaña. Te paso mis tarifas:
+
+Precios por pieza (USD${iv}):
+- 1 historia: ${fmt(c.story.price)}
+- 1 reel con colaboración: ${fmt(c.reelCollab)}
+- 1 reel sin colaboración: ${fmt(c.reel.price)}
+- 1 TikTok: ${fmt(c.tik.price)}
+- Derecho a pauta 30 días: reel ${fmt(c.pautaReel)} / TikTok ${fmt(c.pautaTik)}
+
+Paquete sugerido${meses>1?` (contrato ${meses} meses)`:''}:
+${packList||'  - (armar piezas)'}
+Valor${meses>1?' mensual':''}: ${fmt(monthly)}${iv}${meses>1?` (${v('dPack')}% por paquete + ${v('dLargo')}% por largo plazo ya aplicados)`:` (${v('dPack')}% de descuento por paquete ya aplicado)`}${exclMonths>0?`\nIncluye exclusividad de rubro por ${exclMonths} ${exclMonths==1?'mes':'meses'}.`:''}
+
+Mis métricas promedio: ${Number(v('vReel')).toLocaleString('es-AR')} vistas por reel, ${Number(v('vTik')).toLocaleString('es-AR')} por TikTok, ${Number(v('vStory')).toLocaleString('es-AR')} por historia, ${v('eng')}% de engagement y ${v('arg')}% de audiencia en Argentina. Te puedo mandar las capturas.
+
+Condiciones: incluye hasta 2 rondas de cambios. La pauta no incluye otros usos del contenido. 50% al confirmar y 50% contra publicación. Precios válidos por 15 días.
+
+Quedo atenta!`;
+  }
+
+  function save(){try{const s={qty};ids.forEach(id=>{const el=document.getElementById(id);s[id]=el.type==='checkbox'?el.checked:el.value;});localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
+  ids.forEach(id=>document.getElementById(id).addEventListener('input',()=>{save();render();}));
+  document.getElementById('reset').addEventListener('click',()=>{ids.forEach(id=>{const el=document.getElementById(id);if(el.type==='checkbox')el.checked=defaults[id];else el.value=defaults[id];});qty={...qtyDefaults};save();render();document.getElementById('status').textContent='Valores de ejemplo restaurados';});
+  document.getElementById('copy').addEventListener('click',()=>{const t=document.getElementById('quote');const st=document.getElementById('status');
+    const fallback=()=>{t.focus();t.select();st.textContent='Texto seleccionado: copialo con Ctrl+C / Cmd+C';};
+    try{navigator.clipboard.writeText(t.value).then(()=>{st.textContent='Cotización copiada';},fallback);}catch(e){fallback();}});
+  render();
+})();
+</script>
+</body>
+</html>
